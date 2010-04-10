@@ -27,62 +27,62 @@
     
     dup type /nametype eq
     {
-	dup xcheck
-	{
-	    % Load object bound to name in current environment
-	    load
-	}
-	{
-	    % Leave literal name
-	} ifelse
+        dup xcheck
+        {
+            % Load object bound to name in current environment
+            load
+        }
+        {
+            % Leave literal name
+        } ifelse
     }
     {
-	dup type /stringtype eq
-	{
-	    % Evaluate S-expression
-	    token
-	    {
-		% Store operator to operator stack
+        dup type /stringtype eq
+        {
+            % Evaluate S-expression
+            token
+            {
+                % Store operator to operator stack
                 _operatorstack exch _stacklevel exch put
 
-		% Store arguments to argument stack
-		_argumentstack _stacklevel << >> put
-		0 exch
-		{
-		    token
-		    {
-			% Store current argument
-			_argumentstack _stacklevel get
-			exch 3 index exch put
+                % Store arguments to argument stack
+                _argumentstack _stacklevel << >> put
+                0 exch
+                {
+                    token
+                    {
+                        % Store current argument
+                        _argumentstack _stacklevel get
+                        exch 3 index exch put
 
-			% Increment argument counter
-			exch 1 add exch
-		    }
-		    {
-			% Done handling arguments in current level
-			pop exit
-		    } ifelse
-		} loop
+                        % Increment argument counter
+                        exch 1 add exch
+                    }
+                    {
+                        % Done handling arguments in current level
+                        pop exit
+                    } ifelse
+                } loop
 
-		% Recursively evaluate arguments		
-		0 1 _argumentstack _stacklevel get length 1 sub
-		{   
-		    _argumentstack _stacklevel get exch get pyon
-		} for
-		
-		% Evaluate operator
-		_operatorstack _stacklevel get pyon
-	    }
-	    {
-		% Empty string; do nothing
-	    } ifelse
+                % Recursively evaluate arguments                
+                0 1 _argumentstack _stacklevel get length 1 sub
+                {   
+                    _argumentstack _stacklevel get exch get pyon
+                } for
+                
+                % Evaluate operator
+                _operatorstack _stacklevel get pyon
+            }
+            {
+                % Empty string; do nothing
+            } ifelse
 
-	    % Exec top value
-	    exec
-	}
-	{
-	    % For everything else, do nothing
-	} ifelse
+            % Exec top value
+            exec
+        }
+        {
+            % For everything else, do nothing
+        } ifelse
     } ifelse
 
     % Decrement level counter
@@ -99,9 +99,9 @@
 
     BATCH not
     {
-	(>>Entering GhostScript shell.) =
-	(>>To evaluate PyonScript expressions, call the "pyon" operator) =
-	(>>after every expression.) =
+        (>>Entering GhostScript shell.) =
+        (>>To evaluate PyonScript expressions, call the "pyon" operator) =
+        (>>after every expression.) =
     } if
 } bind def
 
@@ -119,31 +119,31 @@ userdict /ARGUMENTS .knownget
 
     _arguments length 0 gt
     {
-	% Interpret all source files
-	_arguments
-	{
-	    % Individual source file
-	    /_programfile exch (r) file def
+        % Interpret all source files
+        _arguments
+        {
+            % Individual source file
+            /_programfile exch (r) file def
 
-	    {
-		_programfile token
-		{
-		    % Evaluate token as PyonScript
-		    pyon
-		}
-		{
-		    % Done processing
-		    exit
-		} ifelse
-	    } loop
+            {
+                _programfile token
+                {
+                    % Evaluate token as PyonScript
+                    pyon
+                }
+                {
+                    % Done processing
+                    exit
+                } ifelse
+            } loop
 
-	    % Close file
-	    _programfile closefile
-	} forall
+            % Close file
+            _programfile closefile
+        } forall
     }
     {
-	% PyonScript called with no source file
-	(No source file provided.) =
+        % PyonScript called with no source file
+        (No source file provided.) =
     } ifelse
 }
 {
