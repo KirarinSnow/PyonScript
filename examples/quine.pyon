@@ -1,0 +1,23 @@
+% PyonScript example: Quine
+
+({(% PyonScript example: Quine
+
+)})
+({((exch)
+(print (dup))
+(print (string 3) (put (dup) 0 40) (put (dup) 1 123) (put (dup) 2 40))
+(print)
+(= (string 3) (put (dup) 0 41) (put (dup) 1 125) (put (dup) 2 41))
+(print (string 3) (put (dup) 0 40) (put (dup) 1 123) (put (dup) 2 40))
+(print (dup))
+(= (string 3) (put (dup) 0 41) (put (dup) 1 125) (put (dup) 2 41))
+(=))})
+(exch)
+(print (dup))
+(print (string 3) (put (dup) 0 40) (put (dup) 1 123) (put (dup) 2 40))
+(print)
+(= (string 3) (put (dup) 0 41) (put (dup) 1 125) (put (dup) 2 41))
+(print (string 3) (put (dup) 0 40) (put (dup) 1 123) (put (dup) 2 40))
+(print (dup))
+(= (string 3) (put (dup) 0 41) (put (dup) 1 125) (put (dup) 2 41))
+(=)

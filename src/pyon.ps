@@ -1,0 +1,152 @@
+%!PS
+
+% PyonScript programming language
+% Main interpreter
+
+
+
+% P!Stack evaluation stacks
+/_stacklevel 0 def
+/_operatorstack << >> def
+/_argumentstack << >> def
+
+
+
+% PyonScript object eval operator
+%   Evaluates top item on stack:
+%   If string, evaluate as a PyonScript S-expression:
+%      Recursively pyon each subexpression starting with the postinitial.
+%      Then pyon the initial subexpression if it exists.
+%      Then call exec on the top item of the stack.
+%   If executable name, load bound value from current dictionary.
+%   Otherwise, do nothing.
+/pyon
+{
+    % Increment level counter
+    /_stacklevel _stacklevel 1 add store
+    
+    dup type /nametype eq
+    {
+	dup xcheck
+	{
+	    % Load object bound to name in current environment
+	    load
+	}
+	{
+	    % Leave literal name
+	} ifelse
+    }
+    {
+	dup type /stringtype eq
+	{
+	    % Evaluate S-expression
+	    token
+	    {
+		% Store operator to operator stack
+                _operatorstack exch _stacklevel exch put
+
+		% Store arguments to argument stack
+		_argumentstack _stacklevel << >> put
+		0 exch
+		{
+		    token
+		    {
+			% Store current argument
+			_argumentstack _stacklevel get
+			exch 3 index exch put
+
+			% Increment argument counter
+			exch 1 add exch
+		    }
+		    {
+			% Done handling arguments in current level
+			pop exit
+		    } ifelse
+		} loop
+
+		% Recursively evaluate arguments		
+		0 1 _argumentstack _stacklevel get length 1 sub
+		{   
+		    _argumentstack _stacklevel get exch get pyon
+		} for
+		
+		% Evaluate operator
+		_operatorstack _stacklevel get pyon
+	    }
+	    {
+		% Empty string; do nothing
+	    } ifelse
+
+	    % Exec top value
+	    exec
+	}
+	{
+	    % For everything else, do nothing
+	} ifelse
+    } ifelse
+
+    % Decrement level counter
+    _operatorstack _stacklevel undef
+    /_stacklevel _stacklevel 1 sub store
+} bind odef
+
+
+% Interactive PyonScript
+/_interactive
+{
+    % Interactive PyonScript
+    % TODO: implement own REPL shell
+
+    BATCH not
+    {
+	(>>Entering GhostScript shell.) =
+	(>>To evaluate PyonScript expressions, call the "pyon" operator) =
+	(>>after every expression.) =
+    } if
+} bind def
+
+
+% Start PyonScript user dictionary
+<< >> begin
+
+% Interpreter
+userdict /ARGUMENTS .knownget
+{
+    % Interpret PyonScript source
+
+    % Command-line arguments
+    /_arguments exch def
+
+    _arguments length 0 gt
+    {
+	% Interpret all source files
+	_arguments
+	{
+	    % Individual source file
+	    /_programfile exch (r) file def
+
+	    {
+		_programfile token
+		{
+		    % Evaluate token as PyonScript
+		    pyon
+		}
+		{
+		    % Done processing
+		    exit
+		} ifelse
+	    } loop
+
+	    % Close file
+	    _programfile closefile
+	} forall
+    }
+    {
+	% PyonScript called with no source file
+	(No source file provided.) =
+    } ifelse
+}
+{
+    % Enter interactive mode
+    _interactive
+} ifelse

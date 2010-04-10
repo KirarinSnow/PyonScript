@@ -1,0 +1,9 @@
+% PyonScript example: Factorial
+%   Print factorial of integer given in stdin
+
+(def /input ({(%stdin) (r) file}))
+
+1
+(for 1 1 (pop (token input))
+     {mul})
+(=)
