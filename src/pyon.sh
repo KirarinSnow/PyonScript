@@ -8,7 +8,7 @@
 
 if [ $# -eq 0 ]
 then
-    gs -q -dNODISPLAY ${0%/*}/src/pyon.ps
+    gs -q -dNODISPLAY ${0%/*}/pyon.ps
 else
-    gs -q -dNODISPLAY -- ${0%/*}/src/pyon.ps $@ </dev/stdin
+    gs -q -dNODISPLAY -- ${0%/*}/pyon.ps $@ </dev/stdin
 fi
