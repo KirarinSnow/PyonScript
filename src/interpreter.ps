@@ -5,7 +5,7 @@
 
 
 
-% P!Stack evaluation stacks
+% PyonScript evaluation stacks
 /_stacklevel 0 def
 /_operatorstack << >> def
 /_argumentstack << >> def
@@ -29,12 +29,10 @@
     {
         dup xcheck
         {
-            % Load object bound to name in current environment
+            % For executable name, load object bound to name
+	    % in current environment
             load
-        }
-        {
-            % Leave literal name
-        } ifelse
+        } if
     }
     {
         dup type /stringtype eq
