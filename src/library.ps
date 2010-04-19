@@ -124,10 +124,9 @@
     % positivize
     abs exch abs exch
     % using binary GCD algorithm
-    2 copy lt {exch} if
-    dup 0 eq 	% gcd(0,x) = x
+    2 copy mul 0 eq
     {
-	pop
+	add
     }
     {
 	0 3 1 roll % shift: s u v
@@ -252,6 +251,28 @@
     [] eq
 } bind odef
 
+% list? -- return whether an object is a list
+%   obj list? -> bool
+/list?
+{
+    {
+	dup null? {pop true exit} if % reached empty list, finish
+	dup type /arraytype eq
+	{
+	    dup length 2 eq
+	    {
+		cdr % retrieve cdr, continue
+	    }
+	    {
+		pop false exit % non-list array
+	    } ifelse
+	}
+	{
+	    pop false exit % not an array
+	} ifelse
+    } loop
+} bind odef
+
 % list -- create a list out of all objects above topmost mark on operand stack
 %   mark obj0 ... obj(n-1) list -> list
 /list
@@ -260,4 +281,34 @@
     dup length exch
     {[ 3 1 roll exch} forall
     [] exch {]} repeat
+} bind odef
+
+% append -- append two lists
+%  list1 list2 append -> list
+/append
+{
+    [ 3 2 roll  % list2 [ list1
+    {
+	dup null? {pop exit} if
+	aload pop
+    } loop
+    counttomark 2 add -1 roll   % [ <list1 contents> list2
+    {
+	dup null? {pop exit} if
+	aload pop
+    } loop
+    list % make list
+} bind odef
+
+% reverse -- reverse list
+%   list reverse -> list
+/reverse
+{
+    [ exch
+    {
+	dup null? {pop exit} if
+	aload pop
+	exch counttomark 1 roll
+    } loop
+    list
 } bind odef
