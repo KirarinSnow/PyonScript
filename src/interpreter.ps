@@ -37,7 +37,7 @@
     {
         dup type /stringtype eq
         {
-            % Evaluate S-expression
+            % Evaluate S-expression for non-empty expressions
             token
             {
                 % Store operator to operator stack
@@ -70,17 +70,11 @@
                 
                 % Evaluate operator
                 _operatorstack _stacklevel get pyon
-            }
-            {
-                % Empty string; do nothing
-            } ifelse
+            } if
 
             % Exec top value
             exec
-        }
-        {
-            % For everything else, do nothing
-        } ifelse
+        } if
     } ifelse
 
     % Decrement level counter

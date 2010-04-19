@@ -4,11 +4,260 @@
 % Procedure definitions
 
 
-% TODO: needs more
+% TODO: needs more stuff
 
 % Aliases for existing PostScript procedures and operators
 
-/define /def load def
-/+ /add load def
-/- /sub load def
-/* /mul load def
+<<
+%   (alias)	(equivalent)
+
+%   Dictionary operations
+    /define	/def
+
+%   Boolean literals
+    /#t		/true
+    /#f		/false
+
+%   Numerical operations
+    /+		/add
+    /-		/sub
+    /*		/mul
+    /ash	/bitshift
+    /quotient	/idiv
+    /remainder	/mod
+    /expt	/exp
+>>
+{
+    load def
+} forall
+
+
+
+% NEW DEFINITIONS
+
+% Numerical operations
+
+% zero? -- return whether an argument is zero
+%   num zero? -> bool
+/zero?
+{
+    0 eq
+} bind odef
+
+% positive? -- return whether an argument is positive
+%   num positive? -> bool
+/positive?
+{
+    0 gt
+} bind odef
+
+% negative? -- return whether an argument is negative
+%   num negative? -> bool
+/negative?
+{
+    0 lt
+} bind odef
+
+% odd? -- return whether an argument is odd
+%   int odd? -> bool
+/odd?
+{
+    2 mod 0 ne
+} bind odef
+
+% even? -- return whether an argument is even
+%   int even? -> bool
+/even?
+{
+    2 mod 0 eq
+} bind odef
+
+% minimum -- return minimum of array or of two numbers
+%   array minimum -> num
+%   num1 num2 minimum -> num
+/minimum
+{
+    dup type /arraytype eq
+    {
+	[ exch
+	aload length min
+	] dup length 1 sub get
+    }
+    {
+	2 copy gt {exch} if pop
+    } ifelse
+} bind odef
+
+% maximum -- return maximum of array or of two numbers
+%   array maximum -> num
+%   num1 num2 maximum -> num
+/maximum
+{
+    dup type /arraytype eq
+    {
+	[ exch
+	aload length max
+	] dup length 1 sub get
+    }
+    {
+	2 copy lt {exch} if pop
+    } ifelse
+} bind odef
+
+% modulo -- return modulo with same sign as int2
+%   int1 int2 modulo -> int
+/modulo
+{
+    2 copy mul 0 lt
+    {
+	dup 3 1 roll mod add
+    }
+    {
+	mod
+    } ifelse
+} bind odef
+
+% gcd -- return greatest common divisor
+%   int1 int2 gcd -> int
+/gcd
+{
+    % positivize
+    abs exch abs exch
+    % using binary GCD algorithm
+    2 copy lt {exch} if
+    dup 0 eq 	% gcd(0,x) = x
+    {
+	pop
+    }
+    {
+	0 3 1 roll % shift: s u v
+	{
+	    2 copy or 1 and 0 ne {exit} if
+	    -1 bitshift exch -1 bitshift exch
+	    3 -1 roll 1 add 3 1 roll
+	} loop
+	exch
+	{
+	    dup 1 and 0 ne {exit} if
+	    -1 bitshift
+	} loop
+	exch
+	{
+	    {
+		dup 1 and 0 ne {exit} if
+		-1 bitshift
+	    } loop
+	    2 copy lt
+	    {
+		1 index sub
+	    }
+	    {
+		2 copy sub 3 2 roll pop
+	    } ifelse
+	    -1 bitshift
+	    dup 0 eq {exit} if
+	} loop
+	pop exch bitshift
+    } ifelse
+} bind odef
+
+% lcm -- return lowest common multiple
+%   int1 int2 lcm -> int
+/lcm
+{
+    2 copy mul abs 3 1 roll gcd idiv
+} bind odef
+
+
+% Pair and list operations
+
+% pair? -- returns whether object is a pair (2-element array)
+%   obj pair? -> bool
+/pair?
+{
+    dup type /arraytype eq
+    exch length 2 eq and
+} bind def
+
+% cons -- create a pair from two arguments
+%   obj1 obj2 cons -> pair
+/cons
+{
+    [ 3 1 roll ]
+} bind odef
+
+% car -- return first item in pair
+%   pair car -> obj
+/car
+{
+    0 get
+} bind odef
+
+% cdr -- return second item in pair
+%   pair cdr -> obj
+/cdr
+{
+    1 get
+} bind odef
+
+% set-car! -- set first item in pair
+%   pair obj set-car! -> -
+/set-car!
+{
+    0 exch put
+} bind odef
+
+% set-cdr! -- set second item in pair
+%   pair obj set-cdr! -> -
+/set-cdr!
+{
+    1 exch put
+} bind odef
+
+% caar ... cddddr -- retrieve appropriate item in nested pair
+%   pair c...r -> obj
+/caar {car car} bind odef
+/cadr {cdr car} bind odef
+/cdar {car cdr} bind odef
+/cddr {cdr cdr} bind odef
+/caaar {car car car} bind odef
+/caadr {cdr car car} bind odef
+/cadar {car cdr car} bind odef
+/caddr {cdr cdr car} bind odef
+/cdaar {car car cdr} bind odef
+/cdadr {cdr car cdr} bind odef
+/cddar {car cdr cdr} bind odef
+/cdddr {cdr cdr cdr} bind odef
+/caaaar {car car car car} bind odef
+/caaadr {cdr car car car} bind odef
+/caadar {car cdr car car} bind odef
+/caaddr {cdr cdr car car} bind odef
+/cadaar {car car cdr car} bind odef
+/cadadr {cdr car cdr car} bind odef
+/caddar {car cdr cdr car} bind odef
+/cadddr {cdr cdr cdr car} bind odef
+/cdaaar {car car car cdr} bind odef
+/cdaadr {cdr car car cdr} bind odef
+/cdadar {car cdr car cdr} bind odef
+/cdaddr {cdr cdr car cdr} bind odef
+/cddaar {car car cdr cdr} bind odef
+/cddadr {cdr car cdr cdr} bind odef
+/cdddar {car cdr cdr cdr} bind odef
+/cddddr {cdr cdr cdr cdr} bind odef
+
+% null? -- return whether an object is the empty list (empty array)
+%   obj null? -> bool
+/null?
+{
+    [] eq
+} bind odef
+
+% list -- create a list out of all objects above topmost mark on operand stack
+%   mark obj0 ... obj(n-1) list -> list
+/list
+{
+    ]
+    dup length exch
+    {[ 3 1 roll exch} forall
+    [] exch {]} repeat
+} bind odef
