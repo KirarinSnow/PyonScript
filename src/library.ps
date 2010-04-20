@@ -69,13 +69,23 @@
 /@if {@ if} bind odef
 /@ifelse {@ exch @ exch ifelse} bind odef
 
-% iter -- create a procedure that can be repeatedly executed
-%   proc iter -> proc
-%/iter
-%{
-%} bind odef
+% : -- create procedure that executes a given object and returns itself
+%      (executable quine with side effects)
+%      given an input X, produces the procedure
+%          {X exec [{X exec [aload 7 1 roll] cvx} aload 7 1 roll] cvx}
+%   proc : -> proc
+/:
+{
+    [ exch {exec [} aload pop
+	[ 3 index
+	    {exec [ aload 7 1 roll ] cvx} aload pop
+	] cvx
+	{aload 7 1 roll ] cvx} aload pop
+    ] cvx
+} bind odef
 
 
+% Boolean operations
 
 % boolean? -- return whether an argument is a boolean
 %   obj boolean? -> bool
