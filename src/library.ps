@@ -35,6 +35,55 @@
 
 % NEW DEFINITIONS
 
+% Control structures
+
+% sel -- select from two alternatives without executing (cf. ifelse)
+%   bool obj1 obj2 sel -> obj
+/sel
+{
+    3 2 roll not {exch} if pop
+} bind odef
+
+% @ -- create a procedure from an array of S-expressions or a single object
+%   array @ -> proc
+%   obj @ -> proc
+/@
+{
+    dup type /arraytype eq
+    {
+	[ exch
+	{
+	    cvlit {pyon} aload pop
+	} forall
+	] cvx
+    }
+    {
+	[ exch cvlit {cvx exec} aload pop ] cvx
+    } ifelse
+} bind odef
+
+% control structures with @ applied to procedure arguments, for convenience
+/@for {@ for} bind odef
+/@repeat {@ repeat} bind odef
+/@loop {@ loop} bind odef
+/@if {@ if} bind odef
+/@ifelse {@ exch @ exch ifelse} bind odef
+
+% iter -- create a procedure that can be repeatedly executed
+%   proc iter -> proc
+%/iter
+%{
+%} bind odef
+
+
+
+% boolean? -- return whether an argument is a boolean
+%   obj boolean? -> bool
+/boolean?
+{
+    type /booleantype eq
+} bind odef
+
 % Numerical operations
 
 % zero? -- return whether an argument is zero
@@ -122,7 +171,7 @@
 /gcd
 {
     % positivize
-    abs exch abs exch
+    abs cvi exch abs cvi exch
     % using binary GCD algorithm
     2 copy mul 0 eq
     {
@@ -176,7 +225,7 @@
 {
     dup type /arraytype eq
     exch length 2 eq and
-} bind def
+} bind odef
 
 % cons -- create a pair from two arguments
 %   obj1 obj2 cons -> pair
@@ -312,3 +361,4 @@
     } loop
     list
 } bind odef
+
