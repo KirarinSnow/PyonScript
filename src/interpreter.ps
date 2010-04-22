@@ -83,25 +83,37 @@
 } bind odef
 
 
-% Interactive PyonScript
-/_interactive
+% Interactive shell:
+%   modified executive and .promptmsg procedures in GhostScript
+/executive
 {
-    % Interactive PyonScript
-    % TODO: implement own REPL shell
-
-    BATCH not
     {
-        (>>Entering GhostScript shell.) =
-        (>>To evaluate PyonScript expressions, call the "pyon" operator) =
-        (>>after every expression.) =
-    } if
+        prompt
+        { (%statementedit) (r) .systemvmfile } stopped
+        { pop pop $error /errorname get /undefinedfilename eq
+            { .clearerror exit } if		% EOF
+            /handleerror .systemvar exec //null		% ioerror??
+        } if 
+        %	    cvx { .runexec } .execute pop
+        % replaced above line with following two lines
+        /_execline exch def
+        {_execline token {pyon} {exit} ifelse} loop
+    } loop
 } bind def
+
+/.promptmsg
+{
+    (pyon) print
+    count 0 ne {(<) print count =only} if (>) print flush
+} bind def
+
+
 
 
 % Start PyonScript user dictionary
 << >> begin
 
-% Interpreter
+% Interpreter for provided files
 userdict /ARGUMENTS .knownget
 {
     % Interpret PyonScript source
@@ -137,8 +149,4 @@ userdict /ARGUMENTS .knownget
         % PyonScript called with no source file
         (No source file provided.) =
     } ifelse
-}
-{
-    % Enter interactive mode
-    _interactive
-} ifelse
+} if
