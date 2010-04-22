@@ -85,6 +85,7 @@
 
 % Interactive shell:
 %   modified executive and .promptmsg procedures in GhostScript
+%   TODO: fix to handle errors properly; more PyonScript-specific messages
 /executive
 {
     {
@@ -95,18 +96,23 @@
             /handleerror .systemvar exec //null		% ioerror??
         } if 
         %	    cvx { .runexec } .execute pop
-        % replaced above line with following two lines
+        % replaced above line with below
         /_execline exch def
-        {_execline token {pyon} {exit} ifelse} loop
+        {
+	    % apply pyon operator to line for each token
+	    { _execline token {pyon} {exit} ifelse} loop } stopped
+	    {
+	      (>>>>>> Error encountered in PyonScript <<<<<<) =
+              /handleerror .systemvar exec
+        } if 
     } loop
 } bind def
 
 /.promptmsg
 {
     (pyon) print
-    count 0 ne {(<) print count =only} if (>) print flush
+    count 0 ne {(<) print count =only} if (> ) print flush
 } bind def
-
 
 
 
