@@ -13,20 +13,11 @@ and give it the filename of a PyonScript program. If more
 than one file is provided, the programs will be executed
 in sequence.
 
-   $ gs -q -dNODISPLAY -- pyon.ps file1.pyon [...]
+   $ gs -q -dNODISPLAY -- pyon.ps file1.pyon [file2.pyon ...]
 
-To run PyonScript interactively through the GhostScript
-shell:
+To run PyonScript interactively:
 
    $ gs -q -dNODISPLAY pyon.ps
-
-This enters the GhostScript shell. You can then evaluate
-individual PyonScript objects using the "pyon" operator:
-
-   GS> (= (add 2 3)) pyon
-   5
-
-A native PyonScript shell is in development.
 
 
 
@@ -34,9 +25,9 @@ A native PyonScript shell is in development.
 
 To build and install, run the install.sh script:
 
-   $ sudo ./install.sh
+   $ sudo sh install.sh
 
 This builds a script named "pyon" and installs it in the
 /usr/bin/ directory. To run:
 
-   $ pyon file1.pyon [...]
+   $ pyon file1.pyon [file2.pyon ...]
