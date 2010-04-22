@@ -100,9 +100,9 @@
         /_execline exch def
         {
 	    % apply pyon operator to line for each token
-	    { _execline token {pyon} {exit} ifelse} loop } stopped
-	    {
-	      (>>>>>> Error encountered in PyonScript <<<<<<) =
+	    { _execline token {pyon} {exit} ifelse} loop
+	} stopped
+	{
               /handleerror .systemvar exec
         } if 
     } loop
@@ -113,6 +113,7 @@
     (pyon) print
     count 0 ne {(<) print count =only} if (> ) print flush
 } bind def
+
 
 
 
