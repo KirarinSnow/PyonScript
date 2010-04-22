@@ -3,31 +3,33 @@
 
 
 
-==Run==
+==Build==
 
-To install, see the "Install" section below. The following
-instructions are for running PyonScript without installing.
+To build, run the build.sh script:
 
-To run a PyonScript program, run pyon.ps in GhostScript
-and give it the filename of a PyonScript program. If more
-than one file is provided, the programs will be executed
-in sequence.
+   $ sh build.sh
 
-   $ gs -q -dNODISPLAY -- pyon.ps file1.pyon [file2.pyon ...]
+This assembles a "pyon.ps" file containing the source code for
+the PyonScript interpreter as well as a shell script named
+"pyon".
 
-To run PyonScript interactively:
+To run the PyonScript interpreter on one or more PyonScript
+source files in sequence, specify the filenames of the programs
+as arguments:
 
-   $ gs -q -dNODISPLAY pyon.ps
+   $ pyon file1.pyon [file2.pyon ...]
+
+To run PyonScript in interactive mode, simply run "pyon" without
+arguments:
+
+   $ pyon
 
 
 
 ==Install==
 
-To build and install, run the install.sh script:
+To install, run the install.sh script:
 
    $ sudo sh install.sh
 
-This builds a script named "pyon" and installs it in the
-/usr/bin/ directory. To run:
-
-   $ pyon file1.pyon [file2.pyon ...]
+This installs "pyon" and "pyon.ps" in the /usr/bin/ directory.
