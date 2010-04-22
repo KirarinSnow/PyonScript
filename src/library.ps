@@ -13,6 +13,7 @@
 
 %   Dictionary operations
     /define	/def
+    /set!	/store
 
 %   Boolean literals
     /#t		/true
@@ -129,38 +130,6 @@
 /even?
 {
     2 mod 0 eq
-} bind odef
-
-% minimum -- return minimum of array or of two numbers
-%   array minimum -> num
-%   num1 num2 minimum -> num
-/minimum
-{
-    dup type /arraytype eq
-    {
-	[ exch
-	aload length min
-	] dup length 1 sub get
-    }
-    {
-	2 copy gt {exch} if pop
-    } ifelse
-} bind odef
-
-% maximum -- return maximum of array or of two numbers
-%   array maximum -> num
-%   num1 num2 maximum -> num
-/maximum
-{
-    dup type /arraytype eq
-    {
-	[ exch
-	aload length max
-	] dup length 1 sub get
-    }
-    {
-	2 copy lt {exch} if pop
-    } ifelse
 } bind odef
 
 % modulo -- return modulo with same sign as int2
@@ -343,7 +312,7 @@
 } bind odef
 
 % list-length -- length of list
-%  list -> int
+%  list list-length -> int
 /list-length
 {
     0 exch
