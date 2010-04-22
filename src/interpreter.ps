@@ -100,7 +100,7 @@
         /_execline exch def
         {
 	    % apply pyon operator to line for each token
-	    { _execline token {pyon} {exit} ifelse} loop
+	    { _execline token {pyon} {exit} ifelse } loop
 	} stopped
 	{
               /handleerror .systemvar exec

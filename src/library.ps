@@ -342,6 +342,18 @@
     [] exch {]} repeat
 } bind odef
 
+% list-length -- length of list
+%  list -> int
+/list-length
+{
+    0 exch
+    {
+	dup null? {pop exit} if
+	cdr
+	exch 1 add exch
+    } loop
+} bind odef
+
 % append -- append two lists
 %  list1 list2 append -> list
 /append
@@ -372,3 +384,19 @@
     list
 } bind odef
 
+% list-tail -- return sublist obtained by omitting given number of elements
+%   list num list-tail -> list
+/list-tail
+{
+    {
+	dup zero? {pop exit} if
+	exch cdr exch 1 sub
+    } loop
+} bind odef
+
+% list-ref -- index into list by given number (zero-indexed)
+%   list num list-ref -> obj
+/list-ref
+{
+    list-tail car
+} bind odef
