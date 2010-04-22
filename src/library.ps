@@ -36,14 +36,21 @@
 
 % NEW DEFINITIONS
 
-% Control structures
+% Constants
 
-% sel -- select from two alternatives without executing (cf. ifelse)
-%   bool obj1 obj2 sel -> obj
-/sel
-{
-    3 2 roll not {exch} if pop
-} bind odef
+% Infinities
+/inf.0 65536 dup exp def
+/+inf.0 inf.0 def
+/-inf.0 inf.0 neg def
+
+% Limits
+/ARRAYMAX 65536 def
+/STRINGMAX 65536 def
+
+
+
+
+% Control structures
 
 % @ -- create a procedure from an array of S-expressions or a single object
 %   array @ -> proc
@@ -86,7 +93,48 @@
 } bind odef
 
 
-% Boolean operations
+
+% Various operations
+
+% sel -- select from two alternatives without executing (cf. ifelse)
+%   bool obj1 obj2 sel -> obj
+/sel
+{
+    3 2 roll not {exch} if pop
+} bind odef
+
+% cat -- concatenate two composite objects
+%        for dictionary, second dictionary overwrites bindings in first
+%   string1 string2 cat -> string
+%   array1 array2 cat -> array
+%   dict1 dict2 cat -> dict
+/cat
+{
+    dup string?
+    {
+	concatstrings
+    }
+    {
+	dup array?
+	{
+	    [ [ 4 2 roll ]
+	    { aload pop } forall
+	    ]
+	}
+	{
+	    dup dict?
+	    {
+		<< >> 3 2 roll exch copy copy
+	    }
+	    {
+		add
+	    } ifelse
+	} ifelse
+    } ifelse
+} bind odef
+
+
+% Type operations
 
 % boolean? -- return whether an argument is a boolean
 %   obj boolean? -> bool
@@ -94,6 +142,70 @@
 {
     type /booleantype eq
 } bind odef
+
+% number? -- return whether an argument is a number
+%   obj number? -> bool
+/number?
+{
+    type dup /integertype eq exch /realtype eq or
+} bind odef
+
+% real? -- return whether an argument is a real
+%   obj real? -> bool
+/real?
+{
+    type /realtype eq
+} bind odef
+
+% integer? -- return whether an argument is an integer
+%   obj integer? -> bool
+/integer?
+{
+    type /integertype eq
+} bind odef
+
+% name? -- return whether an argument is a name
+%   obj name? -> bool
+/name?
+{
+    type /nametype eq
+} bind odef
+
+% string? -- return whether an argument is a string
+%   obj string? -> bool
+/string?
+{
+    type /stringtype eq
+} bind odef
+
+% array? -- return whether an argument is an array
+%   obj array? -> bool
+/array?
+{
+    type /arraytype eq
+} bind odef
+
+% dict? -- return whether an argument is a dictionary
+%   obj dict? -> bool
+/dict?
+{
+    type /dicttype eq
+} bind odef
+
+% file? -- return whether an argument is a file
+%   obj file? -> bool
+/file?
+{
+    type /filetype eq
+} bind odef
+
+% operator? -- return whether an argument is an operator
+%   obj operator? -> bool
+/operator?
+{
+    type /operatortype eq
+} bind odef
+
 
 % Numerical operations
 
