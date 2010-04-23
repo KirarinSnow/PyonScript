@@ -84,12 +84,12 @@
 
 
 % Interactive shell:
-%   modified executive and .promptmsg procedures in Ghostscript
+%   modifications of executive and prompt procedures in Ghostscript
 %   TODO: fix to handle errors properly; more PyonScript-specific messages
-/executive
+/pyonshell
 {
     {
-        prompt
+        pyonprompt
         { (%statementedit) (r) .systemvmfile } stopped
         { pop pop $error /errorname get /undefinedfilename eq
             { .clearerror exit } if		% EOF
@@ -108,10 +108,14 @@
     } loop
 } bind def
 
-/.promptmsg
+/pyonprompt
 {
-    (pyon) print
-    count 0 ne {(<) print count =only} if (> ) print flush
+    flush flushpage NOPROMPT not
+    {
+	(pyon) print
+	count 0 ne {(<) print count =only} if
+	(> ) print flush
+    } if
 } bind def
 
 
@@ -153,7 +157,7 @@ userdict /ARGUMENTS .knownget
         } forall
     }
     {
-        % PyonScript called with no source file
-         executive
+        % PyonScript called with no source file; start interactive shell
+         pyonshell
     } ifelse
 } if
