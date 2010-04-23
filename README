@@ -45,6 +45,7 @@ install.sh script:
 This installs "pyon" and "pyon.ps" in the /usr/bin/ directory.
 
 
+
 ==Other Systems==
 
 It is possible to run PyonScript directly through GhostScript
@@ -54,8 +55,18 @@ non-Unix-like systems.
 To do so, run GhostScript on the command line with the following
 arguments for interactive mode:
 
-   $ gs -q -dNODISPLAY src/library.ps src/interpreter.ps
+   $ gs -q -dNODISPLAY src/library.ps -- src/interpreter.ps
 
-To run one or more PyonScript programs:
+If additional filenames are given on the command line, they
+will be sequentially interpreted as PyonScript source files.
 
-   $ gs -q -dNODISPLAY src/library.ps -- src/interpreter.ps file.pyon [file2.pyon ...]
+For Windows systems, there is a provided "pyon.bat" file.
+It assumes that the Ghostscript executable is located at
+
+   C:\Program Files\gs\gs8.71\bin\gswin32.exe
+
+If this is not the case, please replace this with the correct
+path. The filenames of PyonScript source files may be provided
+as additional arguments to "pyon.bat"; they will be executed
+in sequence. When called with no arguments, this loads the
+interactive shell.
