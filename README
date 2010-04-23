@@ -9,6 +9,7 @@ The PyonScript interpreter requires GPL Ghostscript to run.
 It has been tested on GPL Ghostscript 8.70 and 8.71 but may not
 work on earlier versions.
 
+GPL Ghostscript may be downloaded at http://www.ghostscript.com/
 
 
 ==Build==
