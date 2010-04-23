@@ -1,10 +1,19 @@
-==PyonScript==
+===PyonScript===
 
+
+The PyonScript programming language is a Lisp-like language
+with a minimal syntax and a stack. It is an extension of the
+PostScript programming language and is implemented in PostScript.
+
+The PyonScript interpreter requires GPL GhostScript to run.
+It has been tested on GPL GhostScript 8.70 and 8.71 but may not
+work on earlier versions.
 
 
 
 ==Build==
 
+On Unix-like systems, you may use the provided build script.
 To build, run the build.sh script:
 
    $ sh build.sh
@@ -28,8 +37,25 @@ arguments:
 
 ==Install==
 
-To install, run the install.sh script:
+On Unix-like systems, you may install PyonScript by running the
+install.sh script:
 
    $ sudo sh install.sh
 
 This installs "pyon" and "pyon.ps" in the /usr/bin/ directory.
+
+
+==Other Systems==
+
+It is possible to run PyonScript directly through GhostScript
+without building and installing. This option may be best for
+non-Unix-like systems.
+
+To do so, run GhostScript on the command line with the following
+arguments for interactive mode:
+
+   $ gs -q -dNODISPLAY src/library.ps src/interpreter.ps
+
+To run one or more PyonScript programs:
+
+   $ gs -q -dNODISPLAY src/library.ps -- src/interpreter.ps file.pyon [file2.pyon ...]
