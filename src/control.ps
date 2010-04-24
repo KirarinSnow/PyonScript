@@ -4,6 +4,55 @@
 % Definitions: Control structures
 
 
+% while -- while loop:
+%          check cond: if true, execute procedure and repeat; else, exit
+%   cond proc while -> <result>
+/while
+{
+    [ 3 1 roll
+    exch {exec} aload pop
+    3 2 roll
+    {{exit} ifelse} aload pop
+    ] cvx loop
+} bind odef
+
+% until -- until loop:
+%          check cond: if false, execute procedure and repeat; else, exit
+%   cond proc until -> <result>
+/until
+{
+    [ 3 1 roll
+    exch {exec {exit}} aload pop
+    4 3 roll
+    {ifelse} aload pop
+    ] cvx loop
+} bind odef
+
+% dowhile -- do ... while loop:
+%            execute procedure; check cond: if true, repeat; else, exit
+%   cond proc dowhile -> <result>
+/dowhile
+{
+    [ 3 1 roll
+    {exec} aload pop
+    3 2 roll
+    {exec not {exit} if} aload pop
+    ] cvx loop
+} bind odef
+
+% dountil -- do ... until loop:
+%            execute procedure; check cond: if true, exit; else, repeat
+%   cond proc dountil -> <result>
+/dountil
+{
+    [ 3 1 roll
+    {exec} aload pop
+    3 2 roll
+    {exec {exit} if} aload pop
+    ] cvx loop
+} bind odef
+
+
 % @ -- create a procedure from an array of S-expressions or a single object
 %   array @ -> proc
 %   obj @ -> proc
@@ -28,6 +77,11 @@
 /@loop {@ loop} bind odef
 /@if {@ if} bind odef
 /@ifelse {@ exch @ exch ifelse} bind odef
+/@while {@ exch @ exch while} bind odef
+/@until {@ exch @ exch until} bind odef
+/@dowhile {@ exch @ exch dowhile} bind odef
+/@dountil {@ exch @ exch dountil} bind odef
+
 
 % : -- create procedure that executes a given object and returns itself
 %      (executable quine with side effects)
