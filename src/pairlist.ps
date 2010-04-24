@@ -1,0 +1,196 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Pairs and lists
+
+
+% pair? -- returns whether object is a pair (2-element array)
+%   obj pair? -> bool
+/pair?
+{
+    dup type /arraytype eq
+    exch length 2 eq and
+} bind odef
+
+% cons -- create a pair from two arguments
+%   obj1 obj2 cons -> pair
+/cons
+{
+    [ 3 1 roll ]
+} bind odef
+
+% car -- return first item in pair
+%   pair car -> obj
+/car
+{
+    0 get
+} bind odef
+
+% cdr -- return second item in pair
+%   pair cdr -> obj
+/cdr
+{
+    1 get
+} bind odef
+
+% set-car! -- set first item in pair
+%   pair obj set-car! -> -
+/set-car!
+{
+    0 exch put
+} bind odef
+
+% set-cdr! -- set second item in pair
+%   pair obj set-cdr! -> -
+/set-cdr!
+{
+    1 exch put
+} bind odef
+
+% caar ... cddddr -- retrieve appropriate item in nested pair
+%   pair c...r -> obj
+/caar {car car} bind odef
+/cadr {cdr car} bind odef
+/cdar {car cdr} bind odef
+/cddr {cdr cdr} bind odef
+/caaar {car car car} bind odef
+/caadr {cdr car car} bind odef
+/cadar {car cdr car} bind odef
+/caddr {cdr cdr car} bind odef
+/cdaar {car car cdr} bind odef
+/cdadr {cdr car cdr} bind odef
+/cddar {car cdr cdr} bind odef
+/cdddr {cdr cdr cdr} bind odef
+/caaaar {car car car car} bind odef
+/caaadr {cdr car car car} bind odef
+/caadar {car cdr car car} bind odef
+/caaddr {cdr cdr car car} bind odef
+/cadaar {car car cdr car} bind odef
+/cadadr {cdr car cdr car} bind odef
+/caddar {car cdr cdr car} bind odef
+/cadddr {cdr cdr cdr car} bind odef
+/cdaaar {car car car cdr} bind odef
+/cdaadr {cdr car car cdr} bind odef
+/cdadar {car cdr car cdr} bind odef
+/cdaddr {cdr cdr car cdr} bind odef
+/cddaar {car car cdr cdr} bind odef
+/cddadr {cdr car cdr cdr} bind odef
+/cdddar {car cdr cdr cdr} bind odef
+/cddddr {cdr cdr cdr cdr} bind odef
+
+% null? -- return whether an object is the empty list (empty array)
+%   obj null? -> bool
+/null?
+{
+    [] eq
+} bind odef
+
+% list? -- return whether an object is a list
+%   obj list? -> bool
+/list?
+{
+    {
+	dup null? {pop true exit} if % reached empty list, finish
+	dup type /arraytype eq
+	{
+	    dup length 2 eq
+	    {
+		cdr % retrieve cdr, continue
+	    }
+	    {
+		pop false exit % non-list array
+	    } ifelse
+	}
+	{
+	    pop false exit % not an array
+	} ifelse
+    } loop
+} bind odef
+
+% list -- create a list out of all objects above topmost mark on operand stack
+%   mark obj0 ... obj(n-1) list -> list
+/list
+{
+    ]
+    dup length exch
+    {[ 3 1 roll exch} forall
+    [] exch {]} repeat
+} bind odef
+
+% list-length -- length of list
+%  list list-length -> int
+/list-length
+{
+    0 exch
+    {
+	dup null? {pop exit} if
+	cdr
+	exch 1 add exch
+    } loop
+} bind odef
+
+% list-append -- append two lists
+%  list1 list2 list-append -> list
+/list-append
+{
+    [ 3 2 roll  % list2 [ list1
+    {
+	dup null? {pop exit} if
+	aload pop
+    } loop
+    counttomark 2 add -1 roll   % [ <list1 contents> list2
+    {
+	dup null? {pop exit} if
+	aload pop
+    } loop
+    list % make list
+} bind odef
+
+% list-reverse -- reverse list
+%   list list-reverse -> list
+/list-reverse
+{
+    [ exch
+    {
+	dup null? {pop exit} if
+	aload pop
+	exch counttomark 1 roll
+    } loop
+    list
+} bind odef
+
+% list-tail -- return sublist obtained by omitting given number of elements
+%   list num list-tail -> list
+/list-tail
+{
+    {
+	dup zero? {pop exit} if
+	exch cdr exch 1 sub
+    } loop
+} bind odef
+
+% list-ref -- index into list by given number (zero-indexed)
+%   list num list-ref -> obj
+/list-ref
+{
+    list-tail car
+} bind odef
+
+% list-member -- return first sublist whose car is the object
+%                or false if not in list
+%   obj list list-member -> list or false
+/list-member
+{
+    {
+	dup null? {pop pop false exit} if  % exit, not found
+	dup car 2 index eq
+	{
+	    % found
+	    exch pop exit
+	}
+	{
+	    % not found, continue
+	    cdr
+	} ifelse
+    } loop
+} bind odef

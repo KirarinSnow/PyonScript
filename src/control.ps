@@ -1,0 +1,45 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Control structures
+
+
+% @ -- create a procedure from an array of S-expressions or a single object
+%   array @ -> proc
+%   obj @ -> proc
+/@
+{
+    dup type /arraytype eq
+    {
+	[ exch
+	{
+	    cvlit {pyon} aload pop
+	} forall
+	] cvx
+    }
+    {
+	[ exch cvlit {cvx exec} aload pop ] cvx
+    } ifelse
+} bind odef
+
+% control structures with @ applied to procedure arguments, for convenience
+/@for {@ for} bind odef
+/@repeat {@ repeat} bind odef
+/@loop {@ loop} bind odef
+/@if {@ if} bind odef
+/@ifelse {@ exch @ exch ifelse} bind odef
+
+% : -- create procedure that executes a given object and returns itself
+%      (executable quine with side effects)
+%      given an input X, produces the procedure
+%          {X exec [{X exec [aload 7 1 roll] cvx} aload 7 1 roll] cvx}
+%   proc : -> proc
+/:
+{
+    [ exch {exec [} aload pop
+	[ 3 index
+	    {exec [ aload 7 1 roll ] cvx} aload pop
+	] cvx
+	{aload 7 1 roll ] cvx} aload pop
+    ] cvx
+} bind odef

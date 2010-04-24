@@ -1,0 +1,31 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Aliases
+
+
+% Aliases for existing PostScript procedures and operators
+
+<<
+%   (alias)	(equivalent)
+
+%   Dictionary operations
+    /define	/def
+    /set!	/store
+
+%   Boolean literals
+    /#t		/true
+    /#f		/false
+
+%   Numerical operations
+    /+		/add
+    /-		/sub
+    /*		/mul
+    /ash	/bitshift
+    /quotient	/idiv
+    /remainder	/mod
+    /expt	/exp
+>>
+{
+    load def
+} forall

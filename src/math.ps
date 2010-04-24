@@ -1,0 +1,103 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Numerical operations
+
+
+% zero? -- return whether an argument is zero
+%   num zero? -> bool
+/zero?
+{
+    0 eq
+} bind odef
+
+% positive? -- return whether an argument is positive
+%   num positive? -> bool
+/positive?
+{
+    0 gt
+} bind odef
+
+% negative? -- return whether an argument is negative
+%   num negative? -> bool
+/negative?
+{
+    0 lt
+} bind odef
+
+% odd? -- return whether an argument is odd
+%   int odd? -> bool
+/odd?
+{
+    2 mod 0 ne
+} bind odef
+
+% even? -- return whether an argument is even
+%   int even? -> bool
+/even?
+{
+    2 mod 0 eq
+} bind odef
+
+% modulo -- return modulo with same sign as int2
+%   int1 int2 modulo -> int
+/modulo
+{
+    2 copy mul 0 lt
+    {
+	dup 3 1 roll mod add
+    }
+    {
+	mod
+    } ifelse
+} bind odef
+
+% gcd -- return greatest common divisor
+%   int1 int2 gcd -> int
+/gcd
+{
+    % positivize
+    abs cvi exch abs cvi exch
+    % using binary GCD algorithm
+    2 copy mul 0 eq
+    {
+	add
+    }
+    {
+	0 3 1 roll % shift: s u v
+	{
+	    2 copy or 1 and 0 ne {exit} if
+	    -1 bitshift exch -1 bitshift exch
+	    3 -1 roll 1 add 3 1 roll
+	} loop
+	exch
+	{
+	    dup 1 and 0 ne {exit} if
+	    -1 bitshift
+	} loop
+	exch
+	{
+	    {
+		dup 1 and 0 ne {exit} if
+		-1 bitshift
+	    } loop
+	    2 copy lt
+	    {
+		1 index sub
+	    }
+	    {
+		2 copy sub 3 2 roll pop
+	    } ifelse
+	    -1 bitshift
+	    dup 0 eq {exit} if
+	} loop
+	pop exch bitshift
+    } ifelse
+} bind odef
+
+% lcm -- return lowest common multiple
+%   int1 int2 lcm -> int
+/lcm
+{
+    2 copy mul abs 3 1 roll gcd idiv
+} bind odef

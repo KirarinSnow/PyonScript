@@ -1,0 +1,75 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Type operations
+
+
+% boolean? -- return whether an argument is a boolean
+%   obj boolean? -> bool
+/boolean?
+{
+    type /booleantype eq
+} bind odef
+
+% number? -- return whether an argument is a number
+%   obj number? -> bool
+/number?
+{
+    type dup /integertype eq exch /realtype eq or
+} bind odef
+
+% real? -- return whether an argument is a real
+%   obj real? -> bool
+/real?
+{
+    type /realtype eq
+} bind odef
+
+% integer? -- return whether an argument is an integer
+%   obj integer? -> bool
+/integer?
+{
+    type /integertype eq
+} bind odef
+
+% name? -- return whether an argument is a name
+%   obj name? -> bool
+/name?
+{
+    type /nametype eq
+} bind odef
+
+% string? -- return whether an argument is a string
+%   obj string? -> bool
+/string?
+{
+    type /stringtype eq
+} bind odef
+
+% array? -- return whether an argument is an array
+%   obj array? -> bool
+/array?
+{
+    type /arraytype eq
+} bind odef
+
+% dict? -- return whether an argument is a dictionary
+%   obj dict? -> bool
+/dict?
+{
+    type /dicttype eq
+} bind odef
+
+% file? -- return whether an argument is a file
+%   obj file? -> bool
+/file?
+{
+    type /filetype eq
+} bind odef
+
+% operator? -- return whether an argument is an operator
+%   obj operator? -> bool
+/operator?
+{
+    type /operatortype eq
+} bind odef

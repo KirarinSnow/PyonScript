@@ -4,105 +4,10 @@
 % Main interpreter
 
 
-
 % PyonScript evaluation stacks
 /_stacklevel 0 def
 /_operatorstack << >> def
 /_argumentstack << >> def
-
-
-
-% pyon -- PyonScript object eval operator
-%   Evaluates top item on stack:
-%   If string, evaluate as a PyonScript S-expression:
-%      Recursively pyon each subexpression starting with the postinitial.
-%      Then pyon the initial subexpression if it exists.
-%      Then call exec on the top item of the stack.
-%   If executable name, load bound value from current dictionary.
-%   Otherwise, do nothing.
-%   obj pyon -> <result>
-/pyon
-{
-    % Increment level counter
-    /_stacklevel _stacklevel 1 add store
-    
-    dup type /nametype eq
-    {
-        dup xcheck
-        {
-            % For executable name, load object bound to name
-	    % in current environment
-            load
-        } if
-    }
-    {
-        dup type /stringtype eq
-        {
-            % Evaluate S-expression for non-empty expressions
-            token
-            {
-                % Store operator to operator stack
-                _operatorstack exch _stacklevel exch put
-
-                % Store arguments to argument stack
-                _argumentstack _stacklevel << >> put
-                0 exch
-                {
-                    token
-                    {
-                        % Store current argument
-                        _argumentstack _stacklevel get
-                        exch 3 index exch put
-
-                        % Increment argument counter
-                        exch 1 add exch
-                    }
-                    {
-                        % Done handling arguments in current level
-                        pop exit
-                    } ifelse
-                } loop
-
-                % Recursively evaluate arguments                
-                0 1 _argumentstack _stacklevel get length 1 sub
-                {   
-                    _argumentstack _stacklevel get exch get pyon
-                } for
-                
-                % Evaluate operator
-                _operatorstack _stacklevel get pyon
-            } if
-
-            % Exec top value
-            exec
-        } if
-    } ifelse
-
-    % Decrement level counter
-    _operatorstack _stacklevel undef
-    /_stacklevel _stacklevel 1 sub store
-} bind odef
-
-% pyonrun -- execute file or string as PyonScript code
-%   string pyonrun -> <result>
-%   file pyonrun -> <result>
-/pyonrun
-{
-    /_execfile exch def
-    {
-	_execfile token
-	{
-	    _execfile type /stringtype eq
-	    {
-		exch /_execfile exch store
-	    } if
-	    pyon
-	}
-	{
-	    exit
-	} ifelse
-    } loop
-} bind odef
 
 
 % Interactive shell:
@@ -139,7 +44,6 @@
 	(> ) print flush
     } if
 } bind def
-
 
 
 

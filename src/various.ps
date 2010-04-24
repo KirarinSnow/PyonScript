@@ -1,0 +1,75 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Various operations
+
+
+% sel -- select from two alternatives without executing (cf. ifelse)
+%   bool obj1 obj2 sel -> obj
+/sel
+{
+    3 2 roll not {exch} if pop
+} bind odef
+
+% cat -- concatenate two composite objects
+%        for dictionary, second dictionary overwrites bindings in first
+%        otherwise, cons
+%   string1 string2 cat -> string
+%   array1 array2 cat -> array
+%   dict1 dict2 cat -> dict
+%   obj1 obj2 cat -> pair
+/cat
+{
+    dup string?
+    {
+	concatstrings
+    }
+    {
+	dup array?
+	{
+	    [ [ 4 2 roll ]
+	    { aload pop } forall
+	    ]
+	}
+	{
+	    dup dict?
+	    {
+		<< >> 3 2 roll exch copy copy
+	    }
+	    {
+		cons
+	    } ifelse
+	} ifelse
+    } ifelse
+} bind odef
+
+% iota -- create array of integers from 0 to n-1
+%   int iota -> array
+/iota
+{
+    [ 0 1 4 3 roll 1 sub {} for ]
+} bind odef
+
+% shift -- roll top n numbers by 1
+/shift
+{
+    1 roll
+} bind odef
+
+% unshift -- roll top n numbers by -1
+/unshift
+{
+    -1 roll
+} bind odef
+
+% shiftall -- roll entire stack by 1
+/shiftall
+{
+    count 1 roll
+} bind odef
+
+% unshiftall -- roll entire stack by -1
+/unshiftall
+{
+    count -1 roll
+} bind odef

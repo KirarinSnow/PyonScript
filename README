@@ -54,15 +54,18 @@ It is possible to run PyonScript directly through Ghostscript
 without building and installing. This option may be best for
 non-Unix-like systems.
 
-To do so, run Ghostscript on the command line with the following
+To do so, concatenate all .ps files in the src/ directory into
+a single "pyon.ps" file, with "interpreter.ps" being the last.
+Then run Ghostscript on the command line with the following
 arguments for interactive mode:
 
-   $ gs -q -dNODISPLAY src/library.ps -- src/interpreter.ps
+   $ gs -q -dNODISPLAY -- pyon.ps
 
 If additional filenames are given on the command line, they
 will be sequentially interpreted as PyonScript source files.
 
 For Windows systems, there is a provided "pyon.bat" file.
+This runs PyonScript directly from the source files.
 It assumes that the Ghostscript executable is located at
 
    C:\Program Files\gs\gs8.71\bin\gswin32.exe
