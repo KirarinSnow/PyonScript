@@ -12,7 +12,7 @@
 
 
 
-% PyonScript object eval operator
+% pyon -- PyonScript object eval operator
 %   Evaluates top item on stack:
 %   If string, evaluate as a PyonScript S-expression:
 %      Recursively pyon each subexpression starting with the postinitial.
@@ -20,6 +20,7 @@
 %      Then call exec on the top item of the stack.
 %   If executable name, load bound value from current dictionary.
 %   Otherwise, do nothing.
+%   obj pyon -> <result>
 /pyon
 {
     % Increment level counter
@@ -80,6 +81,27 @@
     % Decrement level counter
     _operatorstack _stacklevel undef
     /_stacklevel _stacklevel 1 sub store
+} bind odef
+
+% pyonrun -- execute file or string as PyonScript code
+%   string pyonrun -> <result>
+%   file pyonrun -> <result>
+/pyonrun
+{
+    /_execfile exch def
+    {
+	_execfile token
+	{
+	    _execfile type /stringtype eq
+	    {
+		exch /_execfile exch store
+	    } if
+	    pyon
+	}
+	{
+	    exit
+	} ifelse
+    } loop
 } bind odef
 
 
