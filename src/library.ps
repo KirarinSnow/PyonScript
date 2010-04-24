@@ -127,11 +127,43 @@
 		<< >> 3 2 roll exch copy copy
 	    }
 	    {
-		add
+		cons
 	    } ifelse
 	} ifelse
     } ifelse
 } bind odef
+
+% iota -- create array of integers from 0 to n-1
+%   int iota -> array
+/iota
+{
+    [ 0 1 4 3 roll 1 sub {} for ]
+} bind odef
+
+% shift -- roll top n numbers by 1
+/shift
+{
+    1 roll
+} bind odef
+
+% unshift -- roll top n numbers by -1
+/unshift
+{
+    -1 roll
+} bind odef
+
+% shiftall -- roll entire stack by 1
+/shiftall
+{
+    count 1 roll
+} bind odef
+
+% unshiftall -- roll entire stack by -1
+/unshiftall
+{
+    count -1 roll
+} bind odef
+
 
 
 % Type operations
@@ -205,6 +237,7 @@
 {
     type /operatortype eq
 } bind odef
+
 
 
 % Numerical operations
@@ -306,6 +339,7 @@
 {
     2 copy mul abs 3 1 roll gcd idiv
 } bind odef
+
 
 
 % Pair and list operations
@@ -480,4 +514,23 @@
 /list-ref
 {
     list-tail car
+} bind odef
+
+% list-member -- return first sublist whose car is the object
+%                or false if not in list
+%   obj list -> list or false
+/list-member
+{
+    {
+	dup null? {pop pop false exit} if  % exit, not found
+	dup car 2 index eq
+	{
+	    % found
+	    exch pop exit
+	}
+	{
+	    % not found, continue
+	    cdr
+	} ifelse
+    } loop
 } bind odef
