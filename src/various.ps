@@ -43,6 +43,27 @@
     } ifelse
 } bind odef
 
+% trip -- triplicate
+%   obj trip -> obj obj obj
+/trip
+{
+    dup dup
+} bind odef
+
+% quadrup -- quadruplicate
+%   obj quadrup -> obj obj obj obj
+/quadrup
+{
+    dup dup dup
+} bind odef
+
+% ndup -- duplicate n-1 times (pop if n = 0)
+%   obj int ndup -> <n copies of obj>
+/ndup
+{
+    dup 0 le {pop pop} {1 sub {dup} repeat} ifelse
+} bind odef
+
 % iota -- create array of integers from 0 to n-1
 %   int iota -> array
 /iota
