@@ -20,27 +20,35 @@
 %   obj1 obj2 cat -> pair
 /cat
 {
-    dup string?
+    dup xcheck
+    [ exch ]
     {
-	concatstrings
-    }
-    {
-	dup array?
+	dup string?
 	{
-	    [ [ 4 2 roll ]
-	    { aload pop } forall
-	    ]
+	    concatstrings
 	}
 	{
-	    dup dict?
+	    dup array?
 	    {
-		<< >> 3 2 roll exch copy copy
+		[ [ 4 2 roll ]
+		{ aload pop } forall
+		]
 	    }
 	    {
-		cons
+		dup dict?
+		{
+		    << >> 3 2 roll exch copy copy
+		}
+		{
+		    cons
+		} ifelse
 	    } ifelse
 	} ifelse
-    } ifelse
+    } .runandhide
+    aload pop
+    {
+	cvx
+    } if
 } bind odef
 
 % reverse -- reverse array or string
