@@ -83,6 +83,57 @@
 } bind odef
 
 
+% : -- create procedure that executes a given object and returns itself
+%      (executable quine with side effects)
+%      given an input X, produces the procedure
+%          {X exec [{X exec [aload 7 1 roll] cvx} aload 7 1 roll] cvx}
+%   proc : -> proc
+/:
+{
+    [ exch {exec [} aload pop
+	[ 3 index
+	    {exec [ aload 7 1 roll ] cvx} aload pop
+	] cvx
+	{aload 7 1 roll ] cvx} aload pop
+    ] cvx
+} bind odef
+
+% lambda -- create a procedure with local bindings
+%           binds a single variable or an array of variables
+%           (due to implementation reasons, this may exceed the dictionary
+%           stack if deeply embedded)
+%   name proc lambda -> proc
+%   array proc lambda -> proc
+/lambda
+{
+    [
+	% set up current environment as local environment for exec
+	<< >> begin ARRAYMAX array dictstack end
+	{ dup [ {{begin} forall} aload pop } aload
+	    % save dictstack for cleanup; intervening code must be escaped
+	length 4 add -2 roll    % mark setup var proc
+
+	% bind variable(s)
+	{
+	    dup name?
+	    {
+		% bind to top item on stack
+		{{ exch def } aload pop} aload pop
+	    }
+	    {
+		% TODO
+	    } ifelse
+	} .runandhide % hold procedure
+	
+	% execute procedure
+	{{ exec } aload pop} aload pop
+
+	% cleanup; unload local environment from dictionary stack
+	{ ] cvx .runandhide length {end} repeat } aload pop
+    ] cvx
+} bind odef
+
+
 % @ -- create a procedure from an array of S-expressions or a single object
 %   array @ -> proc
 %   obj @ -> proc
@@ -111,23 +162,9 @@
 /@until {@ exch @ exch until} bind odef
 /@dowhile {@ exch @ exch dowhile} bind odef
 /@dountil {@ exch @ exch dountil} bind odef
-/@upto {@ upto} bind def
-/@downto {@ downto} bind def
-/@|| {@ exch @ exch ||} bind def
-/@&& {@ exch @ exch &&} bind def
-
-
-% : -- create procedure that executes a given object and returns itself
-%      (executable quine with side effects)
-%      given an input X, produces the procedure
-%          {X exec [{X exec [aload 7 1 roll] cvx} aload 7 1 roll] cvx}
-%   proc : -> proc
-/:
-{
-    [ exch {exec [} aload pop
-	[ 3 index
-	    {exec [ aload 7 1 roll ] cvx} aload pop
-	] cvx
-	{aload 7 1 roll ] cvx} aload pop
-    ] cvx
-} bind odef
+/@upto {@ upto} bind odef
+/@downto {@ downto} bind odef
+/@|| {@ exch @ exch ||} bind odef
+/@&& {@ exch @ exch &&} bind odef
+/@: {@ :} bind odef
+/@lambda {@ lambda} bind odef

@@ -4,7 +4,7 @@
 % Main interpreter
 
 
-% PyonScript evaluation stacks
+% PyonScript internal variables
 /_stacklevel 0 def
 /_operatorstack << >> def
 /_argumentstack << >> def
@@ -24,10 +24,9 @@
         } if 
         %	    cvx { .runexec } .execute pop
         % replaced above line with below
-        /_execline exch def
         {
 	    % apply pyon operator to line for each token
-	    { _execline token {pyon} {exit} ifelse } loop
+	    pyonrun
 	} stopped
 	{
               /handleerror .systemvar exec
@@ -53,37 +52,17 @@
 % Interpreter for provided files
 userdict /ARGUMENTS .knownget
 {
-    % Interpret PyonScript source
-
     % Command-line arguments
-    /_arguments exch def
-
-    _arguments length 0 gt
+    dup length 0 gt
     {
         % Interpret all source files
-        _arguments
         {
             % Individual source file
-            /_programfile exch (r) file def
-
-            {
-                _programfile token
-                {
-                    % Evaluate token as PyonScript
-                    pyon
-                }
-                {
-                    % Done processing
-                    exit
-                } ifelse
-            } loop
-
-            % Close file
-            _programfile closefile
+	    (r) file pyonrun
         } forall
     }
     {
         % PyonScript called with no source file; start interactive shell
-         pyonshell
+         pop pyonshell
     } ifelse
 } if

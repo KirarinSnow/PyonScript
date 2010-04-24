@@ -80,18 +80,35 @@
 %   file pyonrun -> <result>
 /pyonrun
 {
-    /_execfile exch def
+    dup type /stringtype eq
     {
-	_execfile token
 	{
-	    _execfile type /stringtype eq
+	    token
 	    {
-		exch /_execfile exch store
-	    } if
-	    pyon
-	}
+		exch [ exch ]
+		{
+		    pyon
+		} .runandhide % hold string
+		aload pop
+	    }
+	    {
+		exit
+	    } ifelse
+	} loop
+    }
+    {
 	{
-	    exit
-	} ifelse
-    } loop
+	    dup token
+	    {
+		exch [ exch ]
+		{
+		    pyon
+		} .runandhide % hold file
+		aload pop
+	    }
+	    {
+		closefile exit
+	    } ifelse
+	} loop
+    } ifelse
 } bind odef
