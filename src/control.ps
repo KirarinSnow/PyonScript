@@ -121,7 +121,9 @@
 		{{ exch def } aload pop} aload pop
 	    }
 	    {
-		% TODO
+		% bind to top items in reverse
+		reverse
+		{{ { exch def } forall } aload pop} aload pop
 	    } ifelse
 	} .runandhide % hold procedure
 	
