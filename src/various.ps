@@ -43,6 +43,34 @@
     } ifelse
 } bind odef
 
+% reverse -- reverse array or string
+%   array reverse -> array
+%   string reverse -> string
+/reverse
+{
+    dup xcheck
+    [ exch ]
+    {
+	dup array?
+	{
+	    [ exch {counttomark 1 roll} forall ]
+	}
+	{
+	    dup string?
+	    {
+		[ exch {counttomark 1 roll} forall ] str
+	    }
+	    {
+		% do nothing
+	    } ifelse
+	} ifelse
+    } .runandhide
+    aload pop
+    {
+	cvx
+    } if
+} bind odef
+
 % iota -- create array of integers from 0 to n-1
 %   int iota -> array
 /iota
@@ -55,4 +83,25 @@
 /range
 {
     [ 3 1 roll 1 exch {} for ]
+} bind odef
+
+% str -- convert to string
+%        if array, must be int array; convert ints to chars
+%        else, call cvs with a max-length string
+%   int_array str -> string
+%   obj str -> string
+/str
+{
+    dup array?
+    {
+	dup length string exch 0 exch
+	{
+	    3 copy put
+	    pop 1 add
+	} forall
+	pop
+    }
+    {
+	STRINGMAX string cvs
+    } ifelse
 } bind odef
