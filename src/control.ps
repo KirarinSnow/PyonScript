@@ -4,6 +4,22 @@
 % Definitions: Control structures
 
 
+% && -- logical and with shortcut; returns true iff both procedures do
+%   proc proc && -> bool
+/&&
+{
+    exch .runandhide % hold B, run A
+    exch { exec } { pop false } ifelse
+} bind odef
+
+% || -- logical or with shortcut; returns true if at least one procedure does
+%   proc proc || -> bool
+/||
+{
+    exch .runandhide % hold B, run A
+    exch { pop true } { exec } ifelse
+} bind odef
+
 % while -- while loop:
 %          check cond: if true, execute procedure and repeat; else, exit
 %   cond proc while -> <result>
@@ -53,14 +69,14 @@
 } bind odef
 
 % upto -- execute procedure for all ints in range, inclusive, with step of 1
-%   start end proc -> <result>
+%   start end proc upto -> <result>
 /upto
 {
     1 3 1 roll for
 } bind odef
 
 % downto -- execute procedure for all ints in range, inclusive, with step of -1
-%   start end proc -> <result>
+%   start end proc downto -> <result>
 /downto
 {
     -1 3 1 roll for
@@ -97,6 +113,8 @@
 /@dountil {@ exch @ exch dountil} bind odef
 /@upto {@ upto} bind def
 /@downto {@ downto} bind def
+/@|| {@ exch @ exch ||} bind def
+/@&& {@ exch @ exch &&} bind def
 
 
 % : -- create procedure that executes a given object and returns itself
