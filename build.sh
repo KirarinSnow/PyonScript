@@ -11,6 +11,7 @@ cat src/alias.ps \
     src/core.ps \
     src/math.ps \
     src/pairlist.ps \
+    src/stack.ps \
     src/types.ps \
     src/various.ps \
     src/interpreter.ps > pyon.ps

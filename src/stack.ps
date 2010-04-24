@@ -1,0 +1,50 @@
+%!PS
+
+% PyonScript programming language
+% Definitions: Stack operations
+
+
+% trip -- triplicate
+%   obj trip -> obj obj obj
+/trip
+{
+    dup dup
+} bind odef
+
+% quadrup -- quadruplicate
+%   obj quadrup -> obj obj obj obj
+/quadrup
+{
+    dup dup dup
+} bind odef
+
+% ndup -- duplicate n-1 times (pop if n = 0)
+%   obj int ndup -> <n copies of obj>
+/ndup
+{
+    dup 0 le {pop pop} {1 sub {dup} repeat} ifelse
+} bind odef
+
+% shift -- roll top n numbers by 1
+/shift
+{
+    1 roll
+} bind odef
+
+% unshift -- roll top n numbers by -1
+/unshift
+{
+    -1 roll
+} bind odef
+
+% shiftall -- roll entire stack by 1
+/shiftall
+{
+    count 1 roll
+} bind odef
+
+% unshiftall -- roll entire stack by -1
+/unshiftall
+{
+    count -1 roll
+} bind odef
