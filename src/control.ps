@@ -135,6 +135,47 @@
     ] cvx
 } bind odef
 
+% fun -- create a function that binds one or more variables
+%        in the top level dictionary;
+%        designed for tail recursion, and has garbage collection
+%   name proc fun -> proc
+%   array proc fun -> proc
+/fun
+{
+    [
+	3 1 roll
+	{
+	    dup name?
+	    {
+		% bind to top item on stack
+		{ exch def } aload pop
+	    }
+	    {
+		% bind to top items in reverse
+		reverse
+		{ { exch def } forall } aload pop
+	    } ifelse
+	} .runandhide
+	{exec} aload pop
+    ] cvx
+} bind odef
+
+% defun -- define a function using fun
+%   name name proc defun -> -
+%   name array proc defun -> -
+/defun
+{
+    fun def
+} bind odef
+
+% defl -- define a lambda
+%   name name proc defl -> -
+%   name array proc defl -> -
+/defl
+{
+    lambda def
+} bind odef
+
 
 % @ -- create a procedure from an array of S-expressions or a single object
 %   array @ -> proc
@@ -166,3 +207,6 @@
 /@&& {@ exch @ exch &&} bind odef
 /@: {@ :} bind odef
 /@lambda {@ lambda} bind odef
+/@fun {@ fun} bind odef
+/@defl {@ defl} bind odef
+/@defun {@ defun} bind odef
