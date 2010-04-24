@@ -108,7 +108,7 @@
 {
     [
 	% set up current environment as local environment for exec
-	<< >> begin ARRAYMAX array dictstack end
+	<< >> begin countdictstack array dictstack end
 	{ dup [ {{begin} forall} aload pop } aload
 	    % save dictstack for cleanup; intervening code must be escaped
 	length 4 add -2 roll    % mark setup var proc
