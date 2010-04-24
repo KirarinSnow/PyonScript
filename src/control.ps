@@ -52,6 +52,20 @@
     ] cvx loop
 } bind odef
 
+% upto -- execute procedure for all ints in range, inclusive, with step of 1
+%   start end proc -> <result>
+/upto
+{
+    1 3 1 roll for
+} bind odef
+
+% downto -- execute procedure for all ints in range, inclusive, with step of -1
+%   start end proc -> <result>
+/downto
+{
+    -1 3 1 roll for
+} bind odef
+
 
 % @ -- create a procedure from an array of S-expressions or a single object
 %   array @ -> proc
@@ -81,6 +95,8 @@
 /@until {@ exch @ exch until} bind odef
 /@dowhile {@ exch @ exch dowhile} bind odef
 /@dountil {@ exch @ exch dountil} bind odef
+/@upto {@ upto} bind def
+/@downto {@ downto} bind def
 
 
 % : -- create procedure that executes a given object and returns itself

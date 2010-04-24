@@ -49,3 +49,10 @@
 {
     [ 0 1 4 3 roll 1 sub {} for ]
 } bind odef
+
+% range -- create array of integers between endpoints, inclusive
+%   int int range -> array
+/range
+{
+    [ 3 1 roll 1 exch {} for ]
+} bind odef
