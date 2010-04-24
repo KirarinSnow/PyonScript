@@ -75,12 +75,12 @@
     /_stacklevel _stacklevel 1 sub store
 } bind odef
 
-% pyonrun -- execute file or string as PyonScript code
+% pyonrun -- execute file, string, or array as PyonScript code
 %   string pyonrun -> <result>
 %   file pyonrun -> <result>
 /pyonrun
 {
-    dup type /stringtype eq
+    dup string?
     {
 	{
 	    token
@@ -97,18 +97,25 @@
 	} loop
     }
     {
+	dup file?
 	{
-	    dup token
 	    {
-		exch [ exch ]
+		dup token
 		{
-		    pyon
-		} .runandhide % hold file
-		aload pop
-	    }
-	    {
-		closefile exit
-	    } ifelse
-	} loop
+		    exch [ exch ]
+		    {
+			pyon
+		    } .runandhide % hold file
+		    aload pop
+		}
+		{
+		    closefile exit
+		} ifelse
+	    } loop
+	}
+	{
+	    % array
+	    {pyon} forall
+	} ifelse
     } ifelse
 } bind odef

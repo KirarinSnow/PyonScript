@@ -139,16 +139,12 @@
 %   obj @ -> proc
 /@
 {
-    dup type /arraytype eq
+    dup array?
     {
-	[ exch
-	{
-	    cvlit {pyon} aload pop
-	} forall
-	] cvx
+	[ exch {pyonrun} aload pop ] cvx
     }
     {
-	[ exch cvlit {cvx exec} aload pop ] cvx
+	[ exch [ exch ] {0 get exec} aload pop ] cvx
     } ifelse
 } bind odef
 
