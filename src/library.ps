@@ -435,9 +435,9 @@
     } loop
 } bind odef
 
-% append -- append two lists
-%  list1 list2 append -> list
-/append
+% list-append -- append two lists
+%  list1 list2 list-append -> list
+/list-append
 {
     [ 3 2 roll  % list2 [ list1
     {
@@ -452,9 +452,9 @@
     list % make list
 } bind odef
 
-% reverse -- reverse list
-%   list reverse -> list
-/reverse
+% list-reverse -- reverse list
+%   list list-reverse -> list
+/list-reverse
 {
     [ exch
     {

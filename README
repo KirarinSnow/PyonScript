@@ -12,6 +12,7 @@ work on earlier versions.
 GPL Ghostscript may be downloaded at http://www.ghostscript.com/
 
 
+
 ==Build==
 
 On Unix-like systems, you may use the provided build script.
