@@ -4,6 +4,7 @@
 % Definitions: Core operations
 
 
+
 % pyon -- PyonScript object eval operator
 %   Evaluates top item on stack:
 %   If string, evaluate as a PyonScript S-expression:
@@ -15,9 +16,6 @@
 %   obj pyon -> <result>
 /pyon
 {
-    % Increment level counter
-    /_stacklevel _stacklevel 1 add store
-    
     dup type /nametype eq
     {
         dup xcheck
@@ -33,47 +31,40 @@
             % Evaluate S-expression for non-empty expressions
             token
             {
-                % Store operator to operator stack
-                _operatorstack exch _stacklevel exch put
+		% Hold operator
+		[ exch ]
+		{
+		    % For all arguments
+		    {
+			% Get next argument
+			token
+			{
+			    % Hold remaining arguments
+			    exch [ exch ]
+			    {
+				% Pyon current argument
+				pyon
+			    } .runandhide
+			    % Retrieve remaining arguments
+			    aload pop
+			}
+			{
+			    % Done with arguments; exit
+			    exit
+			} ifelse
+		    } loop
+		} .runandhide
 
-                % Store arguments to argument stack
-                _argumentstack _stacklevel << >> put
-                0 exch
-                {
-                    token
-                    {
-                        % Store current argument
-                        _argumentstack _stacklevel get
-                        exch 3 index exch put
-
-                        % Increment argument counter
-                        exch 1 add exch
-                    }
-                    {
-                        % Done handling arguments in current level
-                        pop exit
-                    } ifelse
-                } loop
-
-                % Recursively evaluate arguments                
-                0 1 _argumentstack _stacklevel get length 1 sub
-                {   
-                    _argumentstack _stacklevel get exch get pyon
-                } for
-                
-                % Evaluate operator
-                _operatorstack _stacklevel get pyon
+		% Retrieve operator and pyon it
+		aload pop pyon 
             } if
 
             % Exec top value
             exec
         } if
     } ifelse
-
-    % Decrement level counter
-    _operatorstack _stacklevel undef
-    /_stacklevel _stacklevel 1 sub store
 } bind odef
+
 
 % pyonrun -- execute file, string, or array as PyonScript code
 %   string pyonrun -> <result>
