@@ -6,14 +6,15 @@
 #   $ sh build.sh
 
 cat src/alias.ps \
+    src/array.ps \
     src/constants.ps \
     src/control.ps \
     src/core.ps \
     src/math.ps \
     src/pairlist.ps \
     src/stack.ps \
+    src/string.ps \
     src/types.ps \
-    src/various.ps \
     src/interpreter.ps > pyon.ps
 
 cp src/pyon.sh pyon

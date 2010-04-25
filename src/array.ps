@@ -1,15 +1,8 @@
 %!PS
 
 % PyonScript programming language
-% Definitions: Various operations
+% Definitions: Array operations
 
-
-% sel -- select from two alternatives without executing (cf. ifelse)
-%   bool obj1 obj2 sel -> obj
-/sel
-{
-    3 2 roll not {exch} if pop
-} bind odef
 
 % cat -- concatenate two composite objects
 %        for dictionary, second dictionary overwrites bindings in first
@@ -91,25 +84,4 @@
 /range
 {
     [ 3 1 roll 1 exch {} for ]
-} bind odef
-
-% str -- convert to string
-%        if array, must be int array; convert ints to chars
-%        else, call cvs with a max-length string
-%   int_array str -> string
-%   obj str -> string
-/str
-{
-    dup array?
-    {
-	dup length string exch 0 exch
-	{
-	    3 copy put
-	    pop 1 add
-	} forall
-	pop
-    }
-    {
-	STRINGMAX string cvs
-    } ifelse
 } bind odef

@@ -48,3 +48,10 @@
 {
     count -1 roll
 } bind odef
+
+% sel -- select from two alternatives without executing (cf. ifelse)
+%   bool obj1 obj2 sel -> obj
+/sel
+{
+    3 2 roll not {exch} if pop
+} bind odef
