@@ -25,9 +25,16 @@
     } ifelse
 } bind odef
 
-% base -- convert int to string with given radix
+% base -- convert int to string with given radix (2 to 36 inclusive), or vice versa
 %   int radix -> string
+%   string radix -> int
 /base
 {
-    STRINGMAX string cvrs
+    exch dup string?
+    {
+	exch str (#) cat exch cat cvi
+    }
+    {
+	exch STRINGMAX string cvrs
+    } ifelse
 } bind odef
