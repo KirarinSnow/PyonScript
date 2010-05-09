@@ -45,7 +45,7 @@
 {
     2 copy mul 0 lt
     {
-	dup 3 1 roll mod add
+	dup 3 1 roll mod dup 0 eq {exch pop} {add} ifelse
     }
     {
 	mod
