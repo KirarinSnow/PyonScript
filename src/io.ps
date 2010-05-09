@@ -21,9 +21,9 @@
 } bind odef
 
 
-% get -- read a PostScript token from stdin
-%   get -> obj
-/get
+% input -- read a PostScript token from stdin
+%   input -> obj
+/input
 {
     (%stdin) (r) file token not
     {
@@ -32,9 +32,9 @@
     } if
 } bind odef
 
-% getline -- read a PostScript line from stdin
-%   getline -> string
-/getline
+% readln -- read a PostScript line from stdin
+%   readln -> string
+/readln
 {
     (%stdin) (r) file STRINGMAX string readline not
     {
@@ -43,9 +43,9 @@
     } if
 } bind odef
 
-% getstring -- read a PostScript string of a given size from stdin
-%   int getstring -> string
-/getstring
+% readstr -- read a PostScript string of a given size from stdin
+%   int readstr -> string
+/readstr
 {
     (%stdin) (r) file exch string readstring not
     {
@@ -54,9 +54,9 @@
     } if
 } bind odef
 
-% getchar -- read a character from stdin (returns int)
-%   getchar -> int
-/getchar
+% readch -- read a character from stdin (returns int)
+%   readch -> int
+/readch
 {
     (%stdin) (r) file read not
     {
