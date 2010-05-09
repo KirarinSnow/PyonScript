@@ -10,6 +10,7 @@ cat src/alias.ps \
     src/constants.ps \
     src/control.ps \
     src/core.ps \
+    src/io.ps \
     src/math.ps \
     src/pairlist.ps \
     src/stack.ps \
