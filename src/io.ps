@@ -21,7 +21,7 @@
 } bind odef
 
 
-% get -- Read a PostScript token from stdin
+% get -- read a PostScript token from stdin
 %   get -> obj
 /get
 {
@@ -32,7 +32,7 @@
     } if
 } bind odef
 
-% getline -- Read a PostScript line from stdin
+% getline -- read a PostScript line from stdin
 %   getline -> string
 /getline
 {
@@ -43,11 +43,22 @@
     } if
 } bind odef
 
-% getstring -- Read a PostScript string of a given size from stdin
+% getstring -- read a PostScript string of a given size from stdin
 %   int getstring -> string
 /getstring
 {
     (%stdin) (r) file exch string readstring not
+    {
+	% TODO: Handle I/O error properly
+	ioerror
+    } if
+} bind odef
+
+% getchar -- read a character from stdin (returns int)
+%   getchar -> int
+/getchar
+{
+    (%stdin) (r) file read not
     {
 	% TODO: Handle I/O error properly
 	ioerror
