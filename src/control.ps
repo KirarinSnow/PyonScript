@@ -176,6 +176,14 @@
     lambda def
 } bind odef
 
+% map -- map a procedure onto an array
+%   proc array map -> proc
+/map
+{
+    [ 3 1 roll exch forall ]
+} bind odef
+
+
 
 % @ -- create a procedure from an array of S-expressions or a single object
 %   array @ -> proc
@@ -211,3 +219,4 @@
 /@fun {@ fun} bind odef
 /@defl {@ defl} bind odef
 /@defun {@ defun} bind odef
+/@map {exch @ exch map} bind odef
